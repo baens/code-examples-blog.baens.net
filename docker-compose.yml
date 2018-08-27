@@ -1,0 +1,30 @@
+version: '3'
+services:
+  database:
+    image: postgres:9.6
+    volumes:
+      - ./run/ssl-files:/var/ssl/
+      - ./scripts/setup-gcp-like-permissions.sql:/docker-entrypoint-initdb.d/1-setup.sql
+      - ./scripts/setup-postgres:/docker-entrypoint-initdb.d/2-setup.sh
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=mydb
+  vault:
+      image: vault:0.10.1
+      ports:
+        - 8200:8200
+      environment:
+        - VAULT_TOKEN=secret-token
+        - VAULT_ADDR=http://127.0.0.1:8200/
+      volumes:
+        - ./scripts/setup-and-run-vault:/setup-and-run.sh
+      command: /setup-and-run.sh
+  database-migrate:
+      image: boxfuse/flyway:5.1.4
+      entrypoint: /migrate
+      volumes:
+        - ./scripts/migrate.sh:/migrate
+
