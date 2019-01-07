@@ -1,0 +1,8 @@
+#!/bin/sh
+
+PROJECT_ID=elindblom-ws-overlord
+
+rm inspec-key*
+ssh-keygen -f inspec-key -C packer -N '' -m PEM
+
+packer build -var gcp-project=$PROJECT_ID -var inspec-key="$(cat inspec-key.pub)" image.json

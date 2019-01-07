@@ -1,0 +1,34 @@
+{
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `gcp-project`}}",
+            "source_image_family": "ubuntu-1804-lts",
+            "zone": "us-central1-a",
+            "image_description": "Image demo for SSH keys",
+            "ssh_username": "packer",
+            "tags": "packer",
+            "image_name": "test-image-{{isotime | clean_image_name}}",
+            "metadata": {
+                "enable-oslogin": "false",
+                "ssh-keys": "packer:{{user `inspec-key`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": ["curl metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H \"Metadata-Flavor: Google\" > /tmp/ip"]
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "source": "/tmp/ip",
+            "destination": "./host"
+        },
+        {
+            "type": "shell-local",
+            "command": "docker run --rm -v $(pwd):/workspace -w /workspace chef/inspec:3.2.7 detect -t ssh://packer@$( cat host ) -i inspec-key"
+        }
+    ]
+}
