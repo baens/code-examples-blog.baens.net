@@ -1,0 +1,4 @@
+#!/bin/sh
+
+gcloud compute instances create-with-container nginx-vm --container-image nginx:1.15.8 --tags http-traffic
+gcloud compute firewall-rules create allow-http-traffic --target-tags http-traffic --allow tcp:80
