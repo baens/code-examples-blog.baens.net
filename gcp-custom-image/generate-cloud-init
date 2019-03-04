@@ -1,0 +1,13 @@
+#!/bin/sh
+
+read -p "Docker registry domain (i.e. registry.gitlab.com) " REGISTRY
+read -p "Registry username " REGISTRY_USERNAME
+read -sp "Registry token/password " REGISTRY_PASSWORD
+echo
+read -p "Docker image name (i.e myregistry.com/something/myimage:1234) " DOCKER_IMAGE
+
+cat cloud-init-config.yml.template | \
+    sed s/%REGISTRY%/$REGISTRY/g | \
+    sed s/%USERNAME%/$REGISTRY_USERNAME/g | \
+    sed s/%PASSWORD%/$REGISTRY_PASSWORD/g | \
+    sed s@%DOCKER_IMAGE%@$DOCKER_IMAGE@g > cloud-init-config.yml

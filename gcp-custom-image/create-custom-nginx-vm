@@ -1,0 +1,6 @@
+#!/bin/sh -x
+if [ ! -f cloud-init-config.yml ]; then
+	./generate-cloud-init
+fi
+
+gcloud compute instances create test-nginx --image cos-stable-72-11316-136-0 --image-project cos-cloud --tags http-traffic --metadata-from-file user-data=cloud-init-config.yml
