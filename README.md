@@ -1,0 +1,1 @@
+This repository houses the examples for [blog.baens.net](https://blog.baens.net). It takes advantaged of orphan branches in git to seperate the differnt examples. Each branch is a different example, so explore the different examples by changing the branch name.
