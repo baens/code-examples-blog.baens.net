@@ -1,0 +1,11 @@
+{
+  "name": "step-by-step-simple-node-docker-k8bs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:baens/code-examples-blog.baens.net.git",
+  "author": "Erik Lindblom <erik@baens.net>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.17.1"
+  }
+}
